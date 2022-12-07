@@ -1,9 +1,11 @@
-﻿using System;
+﻿using Microsoft.VisualBasic.ApplicationServices;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Resources;
 using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,16 +17,18 @@ namespace Lab_8
     public partial class Form2 : Form
     {
         public Form1 f1;
+        public string chosen_button = "";
+        public string animal = "";
+        private int counter = 3;
 
         public Form2(Form1 f)
         {
             InitializeComponent();
             f1 = f;
 
-            int size = buttons();
-            string animal = animal_type();
-            //string chosen_button = bind(size);
-            //button_Click();
+            animal = animal_type();
+            buttons();
+            
         }
 
         public string animal_type()
@@ -43,31 +47,21 @@ namespace Lab_8
 
             return animal;
         }
-        public string bind(int size)
+        public string rand(int size)
         {
             Random rnd = new Random();
             string name = "";
 
-            int index_i = rnd.Next(0, size + 1);
-            int index_j = rnd.Next(0, size + 1);
 
-            Button b = new Button();
-            b.Name = string.Format("button_{0}{1}", index_i, index_j);
+            int index_i = rnd.Next(0, size);
+            int index_j = rnd.Next(0, size);
 
-            foreach (Button button in this.Controls.OfType<Button>())
-            {
-                if(button.Name == b.Name)
-                {
-                    name = button.Name;
-                    MessageBox.Show(name);
-                   b.Dispose();
-                }
-            }
+            name = string.Format("button_{0}{1}", index_i, index_j);
+
             return name;
-
         }
 
-        public int buttons()
+        public void buttons()
         {
             int size = 0;
 
@@ -80,6 +74,8 @@ namespace Lab_8
                 size = 5;
             else
                 MessageBox.Show("wybierz rozmiar planszy");
+
+            chosen_button = rand(size);
 
 
             this.tableLayoutPanel1.ColumnCount = size;
@@ -107,21 +103,75 @@ namespace Lab_8
                     button.Dock = DockStyle.Fill;
                     this.tableLayoutPanel1.Controls.Add(button, j, i);
 
-                    string chosen_button = bind(size);
-
-                    button.Click += new EventHandler(this.button_Click);
+                    button.Click += new EventHandler(button_Click);
+                    timer1.Start();
                 }
             }
-            return size;
 
         }
 
 
         public void button_Click(object sender, EventArgs e)
         {
-            Button btn = sender as Button;
-            MessageBox.Show(btn.Name + "Clicked");
+            Button button = sender as Button;
+
+            if (button.Name == chosen_button && animal == "croc")
+            {
+                counter = -1;
+                timer1.Dispose();
+
+                List<string> list = new List<string>(new string[] { "Zostałeś zjedzony!\nPrzegrałeś!", "*********************************\n\tWygrałeś!\t\n*********************************" }) ;
+                Random rnd = new Random();
+                int r = rnd.Next(list.Count);
+
+                if(r == 0)
+                {
+                    button.Image = Resource1.angry_croc;
+
+                } else if (r == 1) 
+                {
+                    button.Image = Resource1.happy_croc;
+                }
+
+                button.BackgroundImageLayout = ImageLayout.Stretch;
+
+                MessageBox.Show((string)list[r]);
+                this.Close();
+
+            }
+            else if(button.Name == chosen_button && animal != "croc")
+            {
+                counter = -1;
+                timer1.Dispose();
+
+                if(animal == "squirrel")
+                    button.Image = Resource1.squirrel; 
+                else if(animal =="monkey")
+                    button.Image = Resource1.monkey;
+
+                button.BackgroundImageLayout = ImageLayout.Stretch;
+
+                MessageBox.Show("*********************************\n\tWygrałeś!\t\n*********************************");
+                this.Close();
+
+            }
+            else
+            {
+                button.Dispose();
+            }
+
         }
 
+        private void timer1_Tick_1(object sender, EventArgs e)
+        {
+            counter--;
+            if (counter == 0)
+            {
+                timer1.Stop();
+                MessageBox.Show("\tSkończył się czas\t\n\tPrzegrałeś!\t");
+                this.Close();
+            }
+                
+        }
     }
 }

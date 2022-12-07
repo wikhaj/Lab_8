@@ -16,3 +16,4 @@ C:\Users\wikah\source\repos\Lab_8\Lab_8\obj\Debug\net6.0-windows\refint\Lab_8.dl
 C:\Users\wikah\source\repos\Lab_8\Lab_8\obj\Debug\net6.0-windows\Lab_8.pdb
 C:\Users\wikah\source\repos\Lab_8\Lab_8\obj\Debug\net6.0-windows\Lab_8.genruntimeconfig.cache
 C:\Users\wikah\source\repos\Lab_8\Lab_8\obj\Debug\net6.0-windows\ref\Lab_8.dll
+C:\Users\wikah\source\repos\Lab_8\Lab_8\obj\Debug\net6.0-windows\Lab_8.Resource1.resources
